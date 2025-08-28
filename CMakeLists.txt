@@ -16,11 +16,18 @@ add_executable(${PROJECT_NAME} ${SRC_FILES}
 find_package(glfw3 3.3 REQUIRED)
 
 # GLAD (adaugă sursele lui în proiect dacă l-ai descărcat)
-add_library(glad src/glad.c)
+add_library(glad src/glad.c
+        src/Shader.h
+        src/Shader.cpp)
 target_include_directories(glad PUBLIC include)
 
 # Link libraries
 target_link_libraries(${PROJECT_NAME} PRIVATE glfw glad)
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/res $<TARGET_FILE_DIR:${PROJECT_NAME}>/res
+)
 
 # Pe Linux trebuie să mai adaugi librării de sistem
 if(UNIX)
